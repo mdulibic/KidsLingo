@@ -1,4 +1,4 @@
-package fer.digobr.kidslingo.ui.slideshow
+package fer.digobr.kidslingo.ui.game
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import fer.digobr.kidslingo.databinding.FragmentSlideshowBinding
 
-class SlideshowFragment : Fragment() {
+class GameFragment : Fragment() {
 
     private var _binding: FragmentSlideshowBinding? = null
 
@@ -22,14 +22,14 @@ class SlideshowFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val slideshowViewModel =
-            ViewModelProvider(this).get(SlideshowViewModel::class.java)
+        val gameViewModel =
+            ViewModelProvider(this).get(GameViewModel::class.java)
 
         _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textSlideshow
-        slideshowViewModel.text.observe(viewLifecycleOwner) {
+        gameViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

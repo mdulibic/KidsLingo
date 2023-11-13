@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="fer.digobr.kidslingo.ui.gallery.GalleryFragment"
+        android:name="fer.digobr.kidslingo.ui.onboarding.OnboardingFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="fer.digobr.kidslingo.ui.slideshow.SlideshowFragment"
+        android:name="fer.digobr.kidslingo.ui.game.GameFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>
