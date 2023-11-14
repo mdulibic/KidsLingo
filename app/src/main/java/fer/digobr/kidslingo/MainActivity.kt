@@ -10,8 +10,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import fer.digobr.kidslingo.databinding.ActivityMainBinding
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import fer.digobr.kidslingo.databinding.FragmentSlideshowBinding
+import dagger.hilt.android.AndroidEntryPoint
+import fer.digobr.kidslingo.databinding.FragmentGameInfoBinding
 import fer.digobr.kidslingo.ui.game.GameViewModel
+@AndroidEntryPoint
 
 class GameInfoFragment : Fragment() {
 
-    private var _binding: FragmentSlideshowBinding? = null
+    private var _binding: FragmentGameInfoBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -26,14 +27,13 @@ class GameInfoFragment : Fragment() {
         val gameViewModel =
             ViewModelProvider(this).get(GameViewModel::class.java)
 
-        _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        _binding = FragmentGameInfoBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val textView: TextView = binding.textSlideshow
-        gameViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // TODO: Function calls, etc.
     }
 
     override fun onDestroyView() {

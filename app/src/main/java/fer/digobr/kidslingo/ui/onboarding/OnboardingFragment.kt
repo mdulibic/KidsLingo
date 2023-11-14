@@ -4,35 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import fer.digobr.kidslingo.databinding.FragmentGalleryBinding
+import dagger.hilt.android.AndroidEntryPoint
+import fer.digobr.kidslingo.databinding.FragmentOnboardingBinding
 
+@AndroidEntryPoint
 class OnboardingFragment : Fragment() {
 
-    private var _binding: FragmentGalleryBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var onboardingViewModel: OnboardingViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val onboardingViewModel =
-            ViewModelProvider(this).get(OnboardingViewModel::class.java)
+        _binding = FragmentOnboardingBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        _binding = FragmentGalleryBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textGallery
-        onboardingViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // TODO: Function calls, etc.
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -22,7 +24,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -51,4 +53,31 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    val retrofit_version = "2.9.0"
+    val timber_version = "4.7.1"
+    val dagger_hilt = "2.42"
+    val okHttp_version = "4.9.0"
+    val moshi_version = "1.12.0"
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Custom logging
+    implementation("com.jakewharton.timber:timber:$timber_version")
+
+    // Dagger hilt
+    implementation("com.google.dagger:hilt-android:$dagger_hilt")
+    kapt("com.google.dagger:hilt-compiler:$dagger_hilt")
+
+    // Network
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    implementation("com.squareup.okhttp3:okhttp:$okHttp_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okHttp_version")
+    implementation("com.squareup.moshi:moshi:$moshi_version")
+    implementation("com.squareup.moshi:moshi-adapters:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
 }
