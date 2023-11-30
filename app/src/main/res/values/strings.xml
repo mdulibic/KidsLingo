@@ -11,4 +11,6 @@
     <string name="menu_settings">Postavke</string>
     <string name="menu_statistics">Statistika</string>
     <string name="menu_info">Info o igri</string>
+    <string name="start_game">Započni igru</string>
+    <string name="home_label">Pozdrav, %1$s!</string>
 </resources>

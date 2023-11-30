@@ -38,6 +38,14 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.1"
+    }
 }
 
 dependencies {
@@ -59,6 +67,7 @@ dependencies {
     val dagger_hilt = "2.42"
     val okHttp_version = "4.9.0"
     val moshi_version = "1.12.0"
+    val compose_version = "1.3.1"
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -80,4 +89,26 @@ dependencies {
     implementation("com.squareup.moshi:moshi-adapters:$moshi_version")
     implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
     implementation("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+
+//    // Compose
+//    val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
+//    implementation(composeBom)
+//    androidTestImplementation(composeBom)
+//
+//    implementation("androidx.compose.material3:material3")
+//    implementation("androidx.compose.foundation:foundation")
+//    implementation("androidx.compose.ui:ui")
+//
+//    // Android Studio Preview support
+//    implementation("androidx.compose.ui:ui-tooling-preview")
+//    debugImplementation("androidx.compose.ui:ui-tooling")
+//
+//    implementation("androidx.compose.material3:material3-window-size-class")
+//
+//    implementation("androidx.activity:activity-compose:1.4.1")
+//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.4.1")
+
+    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation("androidx.compose.material:material:$compose_version")
+    implementation("androidx.compose.ui:ui-tooling:$compose_version")
 }
