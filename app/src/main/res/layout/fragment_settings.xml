@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,12 +14,67 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:text="Jezik"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button_engleski"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Engleski"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_njemacki"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_gallery"
+        app:layout_constraintWidth_default="wrap" />
+
+    <Button
+        android:id="@+id/button_njemacki"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Njemački"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_francuski"
+        app:layout_constraintStart_toEndOf="@+id/button_engleski"
+        app:layout_constraintTop_toBottomOf="@+id/text_gallery"
+        app:layout_constraintWidth_default="wrap" />
+
+    <Button
+        android:id="@+id/button_francuski"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Francuski"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_spanjolski"
+        app:layout_constraintStart_toEndOf="@+id/button_njemacki"
+        app:layout_constraintTop_toBottomOf="@+id/text_gallery"
+        app:layout_constraintWidth_default="wrap" />
+
+    <Button
+        android:id="@+id/button_spanjolski"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="1dp"
+        android:text="Španjolski"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_francuski"
+        app:layout_constraintTop_toBottomOf="@+id/text_gallery"
+        app:layout_constraintWidth_default="wrap" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
