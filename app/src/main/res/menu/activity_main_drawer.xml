@@ -14,12 +14,12 @@
             android:title="@string/menu_settings" />
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_chart"
             android:title="@string/menu_statistics" />
 
         <item
             android:id="@+id/nav_info"
-            android:icon="@drawable/ic_chart"
+            android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_info" />
     </group>
 </menu>

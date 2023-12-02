@@ -6,13 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import fer.digobr.kidslingo.core.BaseFragment
 import fer.digobr.kidslingo.databinding.FragmentHomeBinding
 import fer.digobr.kidslingo.theme.KidsLingoTheme
 import fer.digobr.kidslingo.ui.home.view.HomeScreen
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -35,6 +39,15 @@ class HomeFragment : Fragment() {
                 HomeScreen(
                     homeViewModel = homeViewModel
                 )
+            }
+        }
+        observeData()
+    }
+
+    private fun observeData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.startGame.collectLatest {
+                svm.navigate(HomeFragmentDirections.actionNavHomeToNavGame())
             }
         }
     }
