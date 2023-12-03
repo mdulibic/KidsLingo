@@ -33,12 +33,6 @@ object NetworkModule {
     }
 
     @Provides
-    @Singleton
-    fun provideOpenAiApiService(retrofit: Retrofit): OpenAiApi {
-        return retrofit.create(OpenAiApi::class.java)
-    }
-
-    @Provides
     fun provideRetrofit(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -90,4 +84,50 @@ object NetworkModule {
             .indent("    ")
         return adapter.toJson(uglyJson)
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object OpenAiApiModule {
+    @Provides
+    @Singleton
+    fun provideOpenAiApiService(retrofit: Retrofit): OpenAiApi {
+        return retrofit.create(OpenAiApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(moshi: Moshi, okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient)
+            .baseUrl("https://api.openai.com/v1")
+            .build()
+    }
+
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient()
+            .newBuilder()
+            .addInterceptor(
+                Interceptor {
+                    val apiKey = "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"
+
+                    val newRequest = it.request().newBuilder()
+                        .addHeader("Authorization", "Bearer $apiKey")
+                        .build()
+
+                    it.proceed(newRequest)
+                },
+            )
+            .build()
+    }
+
+    @Provides
+    fun provideMoshi(): Moshi =
+        Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .add(Timestamp::class.java, Rfc3339DateJsonAdapter().nullSafe())
+            .add(Date::class.java, Rfc3339DateJsonAdapter().nullSafe())
+            .build()
 }

@@ -41,16 +41,16 @@ class HomeViewModel @Inject constructor(
             imageRes = currentGameLanguage?.getHomeImageByLanguage() ?: R.drawable.vector_england,
             buttonRes = R.string.start_game,
             titleLabel = R.string.home_label,
-            username = sessionManager?.username ?: ""
+            username = sessionManager.username ?: ""
         )
     }
 
     private fun Language.getHomeImageByLanguage() =
         when (this) {
             Language.ENGLISH -> R.drawable.vector_england
-            Language.FRENCH -> R.drawable.vector_england
-            Language.GERMAN -> R.drawable.vector_england
-            Language.ITALIAN -> R.drawable.vector_england
+            Language.FRENCH -> R.drawable.vector_france
+            Language.GERMAN -> R.drawable.vector_german
+            Language.ITALIAN -> R.drawable.vector_italia
         }
 
 
