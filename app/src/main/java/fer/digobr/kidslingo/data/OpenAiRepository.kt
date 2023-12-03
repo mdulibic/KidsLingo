@@ -1,10 +1,6 @@
 package fer.digobr.kidslingo.data
 
-import fer.digobr.kidslingo.data.rest.OpenAiApi
-import javax.inject.Inject
+interface OpenAiRepository {
 
-class OpenAiRepository @Inject constructor(private val api: OpenAiApi) {
-
-    suspend fun generateImage(model: String, prompt: String) =
-        api.generateImage(model = model, prompt = prompt)
+    suspend fun generateImage(prompt: String): String?
 }

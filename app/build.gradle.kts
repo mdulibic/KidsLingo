@@ -91,25 +91,10 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
     implementation("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
 
-//    // Compose
-//    val composeBom = platform("androidx.compose:compose-bom:2023.10.01")
-//    implementation(composeBom)
-//    androidTestImplementation(composeBom)
-//
-//    implementation("androidx.compose.material3:material3")
-//    implementation("androidx.compose.foundation:foundation")
-//    implementation("androidx.compose.ui:ui")
-//
-//    // Android Studio Preview support
-//    implementation("androidx.compose.ui:ui-tooling-preview")
-//    debugImplementation("androidx.compose.ui:ui-tooling")
-//
-//    implementation("androidx.compose.material3:material3-window-size-class")
-//
-//    implementation("androidx.activity:activity-compose:1.4.1")
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.4.1")
-
+    // Compose
     implementation("androidx.compose.ui:ui:$compose_version")
     implementation("androidx.compose.material:material:$compose_version")
     implementation("androidx.compose.ui:ui-tooling:$compose_version")
+    implementation("io.coil-kt:coil:1.3.1")
+    implementation("io.coil-kt:coil-compose:1.3.1")
 }

@@ -1,0 +1,73 @@
+package fer.digobr.kidslingo.di
+
+import com.squareup.moshi.Moshi
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import fer.digobr.kidslingo.data.rest.KidsLingoApi
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.*
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object KidsLingoModule {
+
+    @Provides
+    @Singleton
+    fun provideKidsLingoApiService(@KidsLingoBaseUrl retrofit: Retrofit): KidsLingoApi {
+        return retrofit.create(KidsLingoApi::class.java)
+    }
+
+    @Provides
+    @KidsLingoBaseUrl
+    @Singleton
+    fun provideRetrofit(moshi: Moshi, @KidsLingoOkHttp okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient)
+            .baseUrl("http://10.0.2.2:8080/")
+            .build()
+    }
+
+    @Provides
+    @KidsLingoOkHttp
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient()
+            .newBuilder()
+            .build()
+    }
+
+//    private fun loggingInterceptor(): Interceptor {
+//        val logTag = "OkHttp"
+//        return HttpLoggingInterceptor { message ->
+//            if (message.startsWith("{") || message.startsWith("[")) {
+//                try {
+//                    val prettyJson = formatMessageIntoPrettyJson(message)
+//                    Timber.tag(logTag).v(prettyJson)
+//                } catch (exception: JsonDataException) {
+//                    Timber.tag(logTag).e(exception)
+//                }
+//            } else {
+//                Timber.tag(logTag).d(message)
+//            }
+//        }.apply {
+//            level = HttpLoggingInterceptor.Level.BODY
+//        }
+//    }
+//
+//    private fun formatMessageIntoPrettyJson(message: String): String {
+//        val bufferedMessage = Buffer().writeUtf8(message)
+//        val reader = JsonReader.of(bufferedMessage)
+//        val uglyJson = reader.readJsonValue()
+//        val adapter = Moshi.Builder()
+//            .build()
+//            .adapter(Any::class.java)
+//            .indent("    ")
+//        return adapter.toJson(uglyJson)
+//    }
+}
