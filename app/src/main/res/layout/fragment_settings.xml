@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_green"
     tools:context=".ui.onboarding.OnboardingFragment">
 
     <TextView
@@ -14,12 +14,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:gravity="start"
+        android:paddingStart="16dp"
         android:text="Jezik"
-        android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <Button
         android:id="@+id/button_engleski"
@@ -28,12 +31,15 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:text="Engleski"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toStartOf="@+id/button_njemacki"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_gallery"
-        app:layout_constraintWidth_default="wrap" />
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp" />
 
     <Button
         android:id="@+id/button_njemacki"
@@ -42,12 +48,17 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:shadowColor="#FFFFFF"
         android:text="Njemački"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toStartOf="@+id/button_francuski"
         app:layout_constraintStart_toEndOf="@+id/button_engleski"
         app:layout_constraintTop_toBottomOf="@+id/text_gallery"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
 
     <Button
         android:id="@+id/button_francuski"
@@ -56,25 +67,190 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:text="Francuski"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toStartOf="@+id/button_spanjolski"
         app:layout_constraintStart_toEndOf="@+id/button_njemacki"
         app:layout_constraintTop_toBottomOf="@+id/text_gallery"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
 
     <Button
         android:id="@+id/button_spanjolski"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="1dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:text="Španjolski"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_francuski"
         app:layout_constraintTop_toBottomOf="@+id/text_gallery"
-        app:layout_constraintWidth_default="wrap" />
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <TextView
+        android:id="@+id/text_kategorija"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="start"
+        android:paddingStart="16dp"
+        android:text="Kategorija"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_spanjolski" />
+
+    <Button
+        android:id="@+id/button_category1"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Boje"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_category2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_kategorija"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <Button
+        android:id="@+id/button_category2"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Životinje"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_category3"
+        app:layout_constraintStart_toEndOf="@+id/button_category1"
+        app:layout_constraintTop_toBottomOf="@+id/text_kategorija"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <Button
+        android:id="@+id/button_category3"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Hrana"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_category4"
+        app:layout_constraintStart_toEndOf="@+id/button_category2"
+        app:layout_constraintTop_toBottomOf="@+id/text_kategorija"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <Button
+        android:id="@+id/button_category4"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Stvari"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_category3"
+        app:layout_constraintTop_toBottomOf="@+id/text_kategorija"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <TextView
+        android:id="@+id/text_nacin_igre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="start"
+        android:paddingStart="16dp"
+        android:text="Način igre"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_category4"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <Button
+        android:id="@+id/button_visestruki_odabir"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Višestruki odabir"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_tipkanje"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_nacin_igre"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <Button
+        android:id="@+id/button_tipkanje"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Tipkanje"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_pisanje_rukom"
+        app:layout_constraintStart_toEndOf="@+id/button_visestruki_odabir"
+        app:layout_constraintTop_toBottomOf="@+id/text_nacin_igre"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <Button
+        android:id="@+id/button_pisanje_rukom"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
+        android:text="Pisanje rukom"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_tipkanje"
+        app:layout_constraintTop_toBottomOf="@+id/text_nacin_igre"
+        app:layout_constraintWidth_default="wrap"
+        app:strokeColor="#FFF"
+        app:strokeWidth="2dp"/>
+
+    <ImageView
+        android:id="@+id/image_bear_giraffe"
+        android:layout_width="242dp"
+        android:layout_height="243dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/bear_giraffe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
