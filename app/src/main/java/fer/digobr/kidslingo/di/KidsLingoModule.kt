@@ -5,7 +5,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import fer.digobr.kidslingo.data.GameRepository
 import fer.digobr.kidslingo.data.rest.KidsLingoApi
+import fer.digobr.kidslingo.data.rest.OpenAiApi
+import fer.digobr.kidslingo.domain.GameRepositoryImpl
+import fer.digobr.kidslingo.domain.mapper.GameMapper
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -29,7 +33,7 @@ object KidsLingoModule {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
-            .baseUrl("http://10.0.2.2:8080/")
+            .baseUrl("http://10.0.2.2:8080")
             .build()
     }
 
@@ -41,6 +45,15 @@ object KidsLingoModule {
             .newBuilder()
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideGameRepository(
+        openAiApi: OpenAiApi,
+        api: KidsLingoApi,
+        mapper: GameMapper
+    ): GameRepository =
+        GameRepositoryImpl(api = api, openAiApi = openAiApi, mapper = mapper)
 
 //    private fun loggingInterceptor(): Interceptor {
 //        val logTag = "OkHttp"

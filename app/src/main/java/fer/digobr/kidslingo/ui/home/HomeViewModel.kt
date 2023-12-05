@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fer.digobr.kidslingo.R
 import fer.digobr.kidslingo.domain.SessionManager
-import fer.digobr.kidslingo.domain.model.Language
+import fer.digobr.kidslingo.domain.model.GameLanguage
 import fer.digobr.kidslingo.ui.home.model.HomeUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,21 +45,21 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun Language.getHomeImageByLanguage() =
+    private fun GameLanguage.getHomeImageByLanguage() =
         when (this) {
-            Language.ENGLISH -> R.drawable.vector_england
-            Language.FRENCH -> R.drawable.vector_france
-            Language.GERMAN -> R.drawable.vector_german
-            Language.ITALIAN -> R.drawable.vector_italia
+            GameLanguage.ENGLISH -> R.drawable.vector_england
+            GameLanguage.FRENCH -> R.drawable.vector_france
+            GameLanguage.GERMAN -> R.drawable.vector_german
+            GameLanguage.ITALIAN -> R.drawable.vector_italia
         }
 
 
     private fun String.mapToLanguage() =
         when (this) {
-            "en" -> Language.ENGLISH
-            "fr" -> Language.FRENCH
-            "de" -> Language.GERMAN
-            "it" -> Language.ITALIAN
-            else -> Language.ENGLISH
+            "en" -> GameLanguage.ENGLISH
+            "fr" -> GameLanguage.FRENCH
+            "de" -> GameLanguage.GERMAN
+            "it" -> GameLanguage.ITALIAN
+            else -> GameLanguage.ENGLISH
         }
 }

@@ -11,6 +11,8 @@ class SessionManager @Inject constructor(@ApplicationContext private val appCont
         private const val PREFERENCES_APP = "prefs_app"
         private const val USERNAME = "username"
         private const val LANGUAGE = "language"
+        private const val CATEGORY = "category"
+        private const val LEVEL = "level"
     }
 
     private val appPreferences: SharedPreferences by lazy {
@@ -27,5 +29,17 @@ class SessionManager @Inject constructor(@ApplicationContext private val appCont
         get() = appPreferences.getString(LANGUAGE, "en")
         set(value) {
             appPreferences.edit().putString(LANGUAGE, value).apply()
+        }
+
+    var category: String?
+        get() = appPreferences.getString(CATEGORY, "animals")
+        set(value) {
+            appPreferences.edit().putString(CATEGORY, value).apply()
+        }
+
+    var level: String?
+        get() = appPreferences.getString(LEVEL, "1")
+        set(value) {
+            appPreferences.edit().putString(LEVEL, value).apply()
         }
 }

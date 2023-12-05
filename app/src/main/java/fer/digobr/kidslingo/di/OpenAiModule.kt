@@ -5,13 +5,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import fer.digobr.kidslingo.data.OpenAiRepository
 import fer.digobr.kidslingo.data.rest.OpenAiApi
-import fer.digobr.kidslingo.domain.OpenAiRepositoryImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -43,9 +42,12 @@ object OpenAiApiModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(
                 Interceptor {
-                    val apiKey = "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"
+                    val apiKey = "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"
 
                     val newRequest = it.request().newBuilder()
                         .addHeader("Authorization", "Bearer $apiKey")
@@ -56,11 +58,6 @@ object OpenAiApiModule {
             )
             .build()
     }
-
-    @Provides
-    @Singleton
-    fun provideOpenAiRepository(openAiApi: OpenAiApi): OpenAiRepository =
-        OpenAiRepositoryImpl(openAiApi)
 }
 
 
