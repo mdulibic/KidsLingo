@@ -22,4 +22,7 @@
     <string name="games_question_level_2">Što je na slici? Napiši:</string>
     <string name="btn_check">Provjeri</string>
     <string name="btn_continue">Nastavi</string>
+    <string name="correct_answer">Točan odgovor!</string>
+    <string name="wrong_answer">Netočan odgovor!</string>
+    <string name="correct_answer_preview">Točan odgovor: %1$s</string>
 </resources>

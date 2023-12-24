@@ -89,6 +89,7 @@ class GameViewModel @Inject constructor(
     private fun onNextClicked() {
         if (roundCount == MAX_ROUNDS) {
             navigateToResultsScreen()
+            // TODO: Send solutionMap to staticts API
         } else {
             roundCount++
             getGame()

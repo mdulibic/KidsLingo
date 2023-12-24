@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
@@ -20,7 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -28,8 +32,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import fer.digobr.kidslingo.R
 import fer.digobr.kidslingo.domain.model.GameItem
+import fer.digobr.kidslingo.theme.AppDarkGreen
 import fer.digobr.kidslingo.theme.AppGreen
 import fer.digobr.kidslingo.theme.AppOrange
+import fer.digobr.kidslingo.theme.appTypography
 import fer.digobr.kidslingo.ui.game.GameViewModel
 import fer.digobr.kidslingo.ui.game.model.GameUiState
 import fer.digobr.kidslingo.ui.game.model.SolutionUiState
@@ -60,13 +66,12 @@ fun GameLayout(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(AppGreen)
-            .padding(16.dp),
+            .background(AppGreen),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         gameUiState?.let {
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 GameHeader(gameUiState = gameUiState)
@@ -78,7 +83,7 @@ fun GameLayout(
                 Spacer(modifier = Modifier.height(24.dp))
                 when (val item = it.gameItem) {
                     is GameItem.Classic -> TypingGame(
-
+                        onAnswerChanged = onUserAnswerChanged
                     )
 
                     is GameItem.Election -> ElectionGame(
@@ -89,6 +94,8 @@ fun GameLayout(
                 }
             }
             GameCTALayout(
+                correctAnswer = gameUiState.gameItem.word,
+                hasBottomSheetPreview = gameUiState.gameItem is GameItem.Classic,
                 ctaButtonRes = gameUiState.ctaButtonRes,
                 onActionClick = onActionClick,
                 solutionUiState = solutionUiState,
@@ -167,22 +174,65 @@ private fun GameHeader(
 
 @Composable
 private fun GameCTALayout(
+    correctAnswer: String,
+    hasBottomSheetPreview: Boolean,
     ctaButtonRes: Int,
     solutionUiState: SolutionUiState?,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    solutionUiState?.let {
-        Column {
+    if (hasBottomSheetPreview) {
+        solutionUiState?.let {
+            Column(
+                modifier = Modifier
+                    .background(AppDarkGreen)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        6.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(if (it.isCorrect) R.drawable.ic_correct else R.drawable.ic_wrong),
+                        contentDescription = "",
+                        modifier = modifier
+                            .size(24.dp)
+                            .fillMaxWidth(),
+                    )
+                    Text(
+                        text = stringResource(if (it.isCorrect) R.string.correct_answer else R.string.wrong_answer),
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontSize = 20.sp,
+                    )
+                }
+                if (!it.isCorrect) {
+                    Text(
+                        text = stringResource(id = R.string.correct_answer_preview, correctAnswer),
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(16.dp),
+                    )
+                }
+                GameCTAButton(
+                    ctaButtonRes = ctaButtonRes,
+                    onActionClick = onActionClick,
+                )
+            }
+        } ?: run {
             GameCTAButton(
                 ctaButtonRes = ctaButtonRes,
-                onActionClick = onActionClick
+                onActionClick = onActionClick,
             )
         }
-    } ?: run {
+    } else {
         GameCTAButton(
             ctaButtonRes = ctaButtonRes,
-            onActionClick = onActionClick
+            onActionClick = onActionClick,
         )
     }
 }
@@ -198,7 +248,7 @@ private fun GameCTAButton(
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = AppOrange),
         onClick = onActionClick,
         contentPadding = PaddingValues(10.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(16.dp)
     ) {
         Text(
             text = stringResource(id = ctaButtonRes),
