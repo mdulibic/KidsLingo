@@ -19,11 +19,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.round
 
-private const val MAX_ROUNDS = 5
+private const val MAX_ROUNDS = 4
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
@@ -44,7 +42,8 @@ class GameViewModel @Inject constructor(
     private var roundCount = 0
     private var nextGameItemImageUrl: String? = null
     private var gameItems = mutableListOf<GameItem>()
-    private var solutionsMap = mapOf<String, Boolean>()
+    private var solutionsMap = mutableMapOf<String, Boolean>()
+    private var userAnswer: String? = null
 
     private val currentGameLanguage = sessionManager.language.mapToLanguage()
     private val currentGameCategory = sessionManager.category.mapToCategory()
@@ -54,16 +53,40 @@ class GameViewModel @Inject constructor(
         getGame()
     }
 
-    fun onCheckSolutionClicked(solution: String) {
-        val isCorrect = gameItems[roundCount].word == solution
-        _solutionUiState.value = SolutionUiState(
-            isCorrect = isCorrect,
-            userAnswer = solution,
-            correctAnswer = gameItems[roundCount].word
-        )
+    fun onCtaActionClicked() {
+        solutionUiState.value?.let {
+            _solutionUiState.value = null
+            onNextClicked()
+        } ?: kotlin.run {
+            onCheckSolutionClicked(solution = userAnswer)
+        }
     }
 
-    fun onNextClicked() {
+    fun onUserAnswerChanged(answer: String) {
+        userAnswer = answer
+    }
+
+    /**
+     * Election game.
+     */
+    private fun onCheckSolutionClicked(solution: String?) {
+        solution?.let {
+            val isCorrect = gameItems[roundCount].word == it
+            // Save result to map for statistics
+            solutionsMap[it] = isCorrect
+
+            _solutionUiState.value = SolutionUiState(
+                isCorrect = isCorrect,
+                userAnswer = it,
+                correctAnswer = gameItems[roundCount].word
+            )
+            _gameUiState.value = gameUiState.value?.copy(
+                ctaButtonRes = R.string.btn_continue
+            )
+        }
+    }
+
+    private fun onNextClicked() {
         if (roundCount == MAX_ROUNDS) {
             navigateToResultsScreen()
         } else {
@@ -106,11 +129,13 @@ class GameViewModel @Inject constructor(
                     imageUrl = it.second,
                     levelLabelRes = levelLabel,
                     gameQuestionLabelRes = gameQuestionLabel,
-                    roundCount = roundCount + 1
+                    roundCount = roundCount + 1,
+                    ctaButtonRes = R.string.btn_check,
+                    gameItemsCount = it.first.count()
                 )
             }
         }
-        generateNextImage(prompt = gameItems[roundCount++].wordEnglish)
+        // generateNextImage(prompt = gameItems[roundCount++].wordEnglish)
     }
 
     private fun generateNextImage(prompt: String?) {

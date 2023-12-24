@@ -4,12 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fer.digobr.kidslingo.theme.AppGreen
+import fer.digobr.kidslingo.theme.AppOrange
 import fer.digobr.kidslingo.ui.home.HomeViewModel
 
 @Composable
@@ -57,7 +62,7 @@ fun HomeScreen(
                     textAlign = TextAlign.Center
                 )
                 Image(
-                    modifier =  Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(0.5f),
                     contentScale = ContentScale.FillBounds,
@@ -66,15 +71,18 @@ fun HomeScreen(
                 )
             }
 
-            Button(
+            OutlinedButton(
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.outlinedButtonColors(backgroundColor = AppOrange),
                 onClick = { homeViewModel.onStartGameClick() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
+                contentPadding = PaddingValues(10.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = stringResource(id = it.buttonRes),
-                    fontSize = 16.sp
+                    textAlign = TextAlign.Center,
+                    color = Color.White,
+                    fontSize = 18.sp,
                 )
             }
         }

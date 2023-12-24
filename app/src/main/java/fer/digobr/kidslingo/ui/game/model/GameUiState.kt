@@ -8,5 +8,6 @@ data class GameUiState(
     val levelLabelRes: Int,
     val gameQuestionLabelRes: Int,
     val roundCount: Int,
-    val ctaButtonRes: Int
+    val ctaButtonRes: Int,
+    val gameItemsCount: Int
 )

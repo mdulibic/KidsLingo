@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,8 +44,8 @@ fun GameScreen(
     GameLayout(
         gameUiState = gameUiState,
         solutionUiState = solutionUiState,
-        onCheckSolutionClicked = { gameViewModel.onCheckSolutionClicked(it) },
-        onNextClicked = { gameViewModel.onNextClicked() },
+        onActionClick = { gameViewModel.onCtaActionClicked() },
+        onUserAnswerChanged = { gameViewModel.onUserAnswerChanged(it) }
     )
 }
 
@@ -52,8 +53,8 @@ fun GameScreen(
 fun GameLayout(
     gameUiState: GameUiState?,
     solutionUiState: SolutionUiState?,
-    onCheckSolutionClicked: (String) -> Unit,
-    onNextClicked: () -> Unit,
+    onActionClick: () -> Unit,
+    onUserAnswerChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -64,22 +65,34 @@ fun GameLayout(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         gameUiState?.let {
-            val gameItem = gameUiState.gameItems[gameUiState.roundCount]
-            GameHeader(gameUiState = gameUiState)
-            Spacer(modifier = Modifier.height(16.dp))
-            GameImage(
-                questionLabelRes = gameUiState.gameQuestionLabelRes,
-                imageUrl = gameItem.imageUrl
-            )
-            when (gameItem) {
-                is GameItem.Classic -> TypingGame(
-
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                GameHeader(gameUiState = gameUiState)
+                Spacer(modifier = Modifier.height(24.dp))
+                GameImage(
+                    questionLabelRes = gameUiState.gameQuestionLabelRes,
+                    imageUrl = it.imageUrl
                 )
+                Spacer(modifier = Modifier.height(24.dp))
+                when (val item = it.gameItem) {
+                    is GameItem.Classic -> TypingGame(
 
-                is GameItem.Election -> MultipleChoiceGame(
+                    )
 
-                )
+                    is GameItem.Election -> ElectionGame(
+                        gameItem = item,
+                        isSolutionPreview = solutionUiState != null,
+                        onChoiceSelect = onUserAnswerChanged
+                    )
+                }
             }
+            GameCTALayout(
+                ctaButtonRes = gameUiState.ctaButtonRes,
+                onActionClick = onActionClick,
+                solutionUiState = solutionUiState,
+            )
         } ?: run {
             LoadingIndicator()
         }
@@ -144,10 +157,54 @@ private fun GameHeader(
             text = stringResource(
                 id = R.string.round_label,
                 gameUiState.roundCount,
-                gameUiState.gameItems.size
+                gameUiState.gameItemsCount
             ),
             color = Color.White,
             fontSize = 24.sp,
+        )
+    }
+}
+
+@Composable
+private fun GameCTALayout(
+    ctaButtonRes: Int,
+    solutionUiState: SolutionUiState?,
+    onActionClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    solutionUiState?.let {
+        Column {
+            GameCTAButton(
+                ctaButtonRes = ctaButtonRes,
+                onActionClick = onActionClick
+            )
+        }
+    } ?: run {
+        GameCTAButton(
+            ctaButtonRes = ctaButtonRes,
+            onActionClick = onActionClick
+        )
+    }
+}
+
+@Composable
+private fun GameCTAButton(
+    ctaButtonRes: Int,
+    onActionClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedButton(
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = AppOrange),
+        onClick = onActionClick,
+        contentPadding = PaddingValues(10.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(id = ctaButtonRes),
+            textAlign = TextAlign.Center,
+            color = Color.White,
+            fontSize = 18.sp,
         )
     }
 }

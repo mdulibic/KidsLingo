@@ -13,6 +13,6 @@ sealed class GameItem {
     data class Election(
         override val wordEnglish: String,
         override val word: String,
-        val wrongWords: List<String>,
+        val wordMap: Map<String, Boolean>
     ) : GameItem()
 }

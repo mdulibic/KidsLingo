@@ -16,13 +16,32 @@ class GameMapper @Inject constructor() {
                     word = apiGame.word,
                 )
 
-                is ApiGameResponse.ElectionGame -> GameItem.Election(
-                    wordEnglish = apiGame.wordEnglish,
-                    word = apiGame.word,
-                    wrongWords = apiGame.wrongWords
-                )
+                is ApiGameResponse.ElectionGame -> apiGame.mapElectionGameItem()
             }
         }
         return Pair(gameItems, startImageUrl)
     }
+
+    private fun ApiGameResponse.ElectionGame.mapElectionGameItem(): GameItem.Election =
+        with(this) {
+            val items = mutableListOf<String>().let {
+                it.addAll(wrongWords)
+                it
+            }
+            items.add(word)
+            items.shuffle()
+
+            val wordMap = mutableMapOf<String, Boolean>().apply {
+                items.forEach { item ->
+                    val isSolution = item == word
+                    put(item, isSolution)
+                }
+            }
+            GameItem.Election(
+                wordEnglish = wordEnglish,
+                word = word,
+                wordMap = wordMap
+            )
+        }
 }
+

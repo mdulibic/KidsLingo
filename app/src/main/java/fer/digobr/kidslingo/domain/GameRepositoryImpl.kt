@@ -75,14 +75,17 @@ class GameRepositoryImpl @Inject constructor(
             .flatMapLatest { apiGameList ->
                 val words = apiGameList.mapNotNull { it.wordEnglish }
 
+                Timber.d("Api game list $apiGameList")
+
                 flow {
                     coroutineScope {
-                        val imageJob =
-                            async {
-                                generateImage(prompt = words[0])
-                            }
-
-                        val startImageUrl = imageJob.await()
+//                        val imageJob =
+//                            async {
+//                                generateImage(prompt = words[0])
+//                            }
+//
+//                        val startImageUrl = imageJob.await()
+                        val startImageUrl = "https://placekitten.com/300/200"
 
                         val game = mapper.mapToGameItems(
                             apiGameList = apiGameList,
