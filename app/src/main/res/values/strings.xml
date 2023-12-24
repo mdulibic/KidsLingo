@@ -20,4 +20,6 @@
     <string name="round_label">%1$s/%2$s</string>
     <string name="games_question_level_1">Odaberi točan pojam:</string>
     <string name="games_question_level_2">Što je na slici? Napiši:</string>
+    <string name="btn_check">Provjeri</string>
+    <string name="btn_continue">Nastavi</string>
 </resources>
