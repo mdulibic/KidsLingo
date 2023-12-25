@@ -4,13 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import fer.digobr.kidslingo.domain.SessionManager
 import javax.inject.Inject
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor() : ViewModel() {
+class OnboardingViewModel @Inject constructor(
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+    fun isUserOnboarded() = sessionManager.username != null
+    fun onStartClicked(username: String) {
+        sessionManager.username = username
     }
-    val text: LiveData<String> = _text
 }

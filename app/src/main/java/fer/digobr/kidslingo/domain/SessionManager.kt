@@ -20,7 +20,7 @@ class SessionManager @Inject constructor(@ApplicationContext private val appCont
     }
 
     var username: String?
-        get() = appPreferences.getString(USERNAME, "Korisnik")
+        get() = appPreferences.getString(USERNAME, null)
         set(value) {
             appPreferences.edit().putString(USERNAME, value).apply()
         }

@@ -38,4 +38,6 @@
     <string name="language">Jezik</string>
     <string name="category">Kategorija</string>
     <string name="level">Level</string>
+    <string name="enter_name">Upiši svoje ime:</string>
+    <string name="start">Kreni</string>
 </resources>

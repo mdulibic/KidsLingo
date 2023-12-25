@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,7 +55,10 @@ private fun SettingsLayout(
     onCategoryChanged: (GameCategory) -> Unit,
     onLevelChanged: (GameLevel) -> Unit,
 ) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.End
+    ) {
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Top
@@ -96,8 +100,7 @@ private fun SettingsLayout(
             )
         }
         Image(
-            modifier = Modifier.size(150.dp),
-            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.size(180.dp),
             painter = painterResource(id = R.drawable.ic_hedgehog),
             contentDescription = null
         )

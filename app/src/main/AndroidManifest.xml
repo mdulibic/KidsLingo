@@ -2,24 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
+        android:name=".KidsLingoApp"
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_app_icon"
         android:label="@string/app_name"
-        android:name=".KidsLingoApp"
         android:roundIcon="@mipmap/ic_app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KidsLingo"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.KidsLingo.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.KidsLingo.NoActionBar">
             <intent-filter>
@@ -29,5 +33,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

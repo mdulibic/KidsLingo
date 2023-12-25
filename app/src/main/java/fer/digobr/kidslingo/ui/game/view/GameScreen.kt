@@ -61,7 +61,7 @@ fun GameLayout(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(AppGreen),
         horizontalAlignment = Alignment.CenterHorizontally,
