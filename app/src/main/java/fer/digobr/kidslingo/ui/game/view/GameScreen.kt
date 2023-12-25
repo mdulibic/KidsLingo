@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
@@ -24,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -35,7 +33,6 @@ import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.theme.AppDarkGreen
 import fer.digobr.kidslingo.theme.AppGreen
 import fer.digobr.kidslingo.theme.AppOrange
-import fer.digobr.kidslingo.theme.appTypography
 import fer.digobr.kidslingo.ui.game.GameViewModel
 import fer.digobr.kidslingo.ui.game.model.GameUiState
 import fer.digobr.kidslingo.ui.game.model.SolutionUiState

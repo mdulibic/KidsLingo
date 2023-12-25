@@ -26,7 +26,7 @@ class SessionManager @Inject constructor(@ApplicationContext private val appCont
         }
 
     var language: String?
-        get() = appPreferences.getString(LANGUAGE, "en")
+        get() = appPreferences.getString(LANGUAGE, "english")
         set(value) {
             appPreferences.edit().putString(LANGUAGE, value).apply()
         }

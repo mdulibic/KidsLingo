@@ -25,4 +25,17 @@
     <string name="correct_answer">Točan odgovor!</string>
     <string name="wrong_answer">Netočan odgovor!</string>
     <string name="correct_answer_preview">Točan odgovor: %1$s</string>
+    <string name="level_election">Višestruki odabir</string>
+    <string name="level_typing">Tipkanje</string>
+    <string name="language_english">Engleski</string>
+    <string name="language_french">Francuski</string>
+    <string name="language_german">Njemački</string>
+    <string name="language_italian">Talijanski</string>
+    <string name="category_food">Hrana</string>
+    <string name="category_colors">Boje</string>
+    <string name="category_animals">Životinje</string>
+    <string name="category_objects">Stvari</string>
+    <string name="language">Jezik</string>
+    <string name="category">Kategorija</string>
+    <string name="level">Level</string>
 </resources>

@@ -55,7 +55,7 @@ fun ElectionGame(
 }
 
 @Composable
-fun ChoiceButton(
+private fun ChoiceButton(
     isSolution: Boolean?,
     isSelected: Boolean,
     choice: String,
