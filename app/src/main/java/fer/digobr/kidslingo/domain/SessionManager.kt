@@ -38,7 +38,7 @@ class SessionManager @Inject constructor(@ApplicationContext private val appCont
         }
 
     var level: String?
-        get() = appPreferences.getString(LEVEL, "2")
+        get() = appPreferences.getString(LEVEL, "1")
         set(value) {
             appPreferences.edit().putString(LEVEL, value).apply()
         }

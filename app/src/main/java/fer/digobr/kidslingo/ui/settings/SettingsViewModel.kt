@@ -22,7 +22,7 @@ class SettingsViewModel @Inject constructor(
         SettingsUiState(
             selectedLanguage = settingsMapper.mapToLanguage(sessionManager.language),
             selectedCategory = settingsMapper.mapToCategory(sessionManager.category),
-            selectedLevel = settingsMapper.mapToLevel(sessionManager.level)
+            selectedLevel = settingsMapper.mapToLevel(sessionManager.level?.toInt())
         )
     )
     val uiState: StateFlow<SettingsUiState> = _uiState

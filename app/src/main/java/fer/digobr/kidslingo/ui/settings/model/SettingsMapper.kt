@@ -36,10 +36,10 @@ class SettingsMapper @Inject constructor() {
         }
     }
 
-    fun mapToLevel(value: String?) = with(value) {
+    fun mapToLevel(value: Int?) = with(value) {
         when (this) {
-            "typing" -> GameLevel.TYPING
-            "election" -> GameLevel.ELECTION
+            1 -> GameLevel.ELECTION
+            2 -> GameLevel.TYPING
             else -> GameLevel.ELECTION
         }
     }
