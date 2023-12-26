@@ -43,13 +43,23 @@ fun GameScreen(
 ) {
     val gameUiState by gameViewModel.gameUiState.collectAsState()
     val solutionUiState by gameViewModel.solutionUiState.collectAsState()
+    val resultsUiState by gameViewModel.resultsUiState.collectAsState()
 
-    GameLayout(
-        gameUiState = gameUiState,
-        solutionUiState = solutionUiState,
-        onActionClick = { gameViewModel.onCtaActionClicked() },
-        onUserAnswerChanged = { gameViewModel.onUserAnswerChanged(it) }
-    )
+    resultsUiState?.let {
+        ResultsScreen(
+            uiState = it,
+            onContinueClick = {
+                gameViewModel.onExitGame()
+            }
+        )
+    } ?: run {
+        GameLayout(
+            gameUiState = gameUiState,
+            solutionUiState = solutionUiState,
+            onActionClick = { gameViewModel.onCtaActionClicked() },
+            onUserAnswerChanged = { gameViewModel.onUserAnswerChanged(it) }
+        )
+    }
 }
 
 @Composable
@@ -245,7 +255,7 @@ private fun GameCTAButton(
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = AppOrange),
         onClick = onActionClick,
         contentPadding = PaddingValues(10.dp),
-        modifier = Modifier.fillMaxWidth().padding(16.dp)
+        modifier = modifier.fillMaxWidth().padding(16.dp)
     ) {
         Text(
             text = stringResource(id = ctaButtonRes),

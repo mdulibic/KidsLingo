@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
@@ -56,7 +54,7 @@ fun HomeScreen(
                 Text(
                     text = stringResource(id = it.titleLabel, it.username),
                     color = Color.White,
-                    fontSize = 24.sp,
+                    fontSize = 28.sp,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center

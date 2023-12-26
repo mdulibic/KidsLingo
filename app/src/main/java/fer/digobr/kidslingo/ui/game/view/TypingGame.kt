@@ -26,7 +26,7 @@ fun TypingGame(
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.White,
-            textColor = Color.Black
+            textColor = Color.DarkGray
         )
     )
 }

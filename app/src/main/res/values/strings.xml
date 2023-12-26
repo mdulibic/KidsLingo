@@ -40,4 +40,9 @@
     <string name="level">Level</string>
     <string name="enter_name">Upiši svoje ime:</string>
     <string name="start">Kreni</string>
+    <string name="results">Rezultati</string>
+    <string name="results_score">%1$s/%2$s</string>
+    <string name="good_message">Samo tako nastavi!</string>
+    <string name="excellent_message">Bravo, sve točno!</string>
+    <string name="average_message">Nemoj odustati, nastavi vježbati!</string>
 </resources>

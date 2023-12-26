@@ -25,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -44,7 +43,7 @@ fun OnboardingScreen(
         modifier = Modifier.fillMaxSize().background(AppGrey),
     ) {
         Column(
-            modifier = Modifier.weight(1f).padding(16.dp),
+            modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 32.dp),
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
@@ -55,7 +54,7 @@ fun OnboardingScreen(
             Text(
                 text = stringResource(id = R.string.enter_name),
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = Color.DarkGray,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 16.dp),
             )
@@ -67,7 +66,7 @@ fun OnboardingScreen(
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.White,
-                    textColor = Color.Black
+                    textColor = Color.DarkGray
                 )
             )
             Column(
@@ -76,7 +75,7 @@ fun OnboardingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    modifier = Modifier.size(250.dp),
+                    modifier = Modifier.size(300.dp),
                     painter = painterResource(id = R.drawable.bear_giraffe),
                     contentDescription = null
                 )
@@ -98,5 +97,4 @@ fun OnboardingScreen(
             )
         }
     }
-
 }

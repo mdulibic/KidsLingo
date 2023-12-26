@@ -12,6 +12,7 @@ import fer.digobr.kidslingo.domain.usecase.GetGameUseCase
 import fer.digobr.kidslingo.domain.usecase.GetGeneratedImageByPrompt
 import fer.digobr.kidslingo.ui.game.model.GameType
 import fer.digobr.kidslingo.ui.game.model.GameUiState
+import fer.digobr.kidslingo.ui.game.model.ResultsUiState
 import fer.digobr.kidslingo.ui.game.model.SolutionUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val MAX_ROUNDS = 4
@@ -38,6 +40,9 @@ class GameViewModel @Inject constructor(
 
     private val _exitGame = MutableSharedFlow<Unit>()
     val exitGame: SharedFlow<Unit> = _exitGame
+
+    private val _resultsUiState = MutableStateFlow<ResultsUiState?>(null)
+    val resultsUiState: StateFlow<ResultsUiState?> = _resultsUiState
 
     private var roundCount = 0
     private var nextGameItemImageUrl: String? = null
@@ -71,9 +76,10 @@ class GameViewModel @Inject constructor(
      */
     private fun onCheckSolutionClicked(solution: String?) {
         solution?.let {
-            val isCorrect = gameItems[roundCount].word == it
+            val word = gameItems[roundCount].word
+            val isCorrect = word == it
             // Save result to map for statistics
-            solutionsMap[it] = isCorrect
+            solutionsMap[word] = isCorrect
 
             _solutionUiState.value = SolutionUiState(
                 isCorrect = isCorrect,
@@ -88,7 +94,19 @@ class GameViewModel @Inject constructor(
 
     private fun onNextClicked() {
         if (roundCount == MAX_ROUNDS) {
-            navigateToResultsScreen()
+            val score = solutionsMap.values.count { it }
+            val questionCount = solutionsMap.size
+            Timber.d("Solution: $score/$questionCount")
+            val messageRes = getMessageRes(score, questionCount)
+            viewModelScope.launch {
+                _resultsUiState.emit(
+                    ResultsUiState(
+                        score = score,
+                        questionCount = questionCount,
+                        messageRes = messageRes
+                    )
+                )
+            }
             // TODO: Send solutionMap to staticts API
         } else {
             roundCount++
@@ -96,12 +114,19 @@ class GameViewModel @Inject constructor(
         }
     }
 
-    fun onExitGame() = viewModelScope.launch {
-        _exitGame.emit(Unit)
+    private fun getMessageRes(score: Int, questionCount: Int): Int {
+        val proportion = score.toFloat() / questionCount
+
+        return when {
+            proportion >= 0.8 -> R.string.excellent_message
+            proportion >= 0.6 -> R.string.good_message
+            proportion >= 0.4 -> R.string.average_message
+            else -> R.string.average_message
+        }
     }
 
-    private fun navigateToResultsScreen() {
-
+    fun onExitGame() = viewModelScope.launch {
+        _exitGame.emit(Unit)
     }
 
     private fun getGame() {
