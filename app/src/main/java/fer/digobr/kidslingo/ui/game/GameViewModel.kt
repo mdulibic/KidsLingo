@@ -112,7 +112,10 @@ class GameViewModel @Inject constructor(
             }
             // TODO: Send solutionMap to staticts API
         } else {
-            continueGame()
+            // TODO: Delete when generating image works
+            roundCount++
+            //continueGame()
+            getGame()
         }
     }
 
@@ -162,7 +165,9 @@ class GameViewModel @Inject constructor(
                     addAll(it.first)
                 }
 
-                maxRoundsCount = gameItems.size
+                maxRoundsCount = gameItems.size - 1
+
+                Timber.d("Max rounds count $maxRoundsCount")
 
                 _gameUiState.value = GameUiState(
                     gameItem = it.first[0],
