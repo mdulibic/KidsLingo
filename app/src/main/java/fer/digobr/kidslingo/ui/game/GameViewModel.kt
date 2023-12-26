@@ -45,6 +45,7 @@ class GameViewModel @Inject constructor(
     val resultsUiState: StateFlow<ResultsUiState?> = _resultsUiState
 
     private var roundCount = 0
+    private var maxRoundsCount: Int = 0
     private var nextGameItemImageUrl: String? = null
     private var gameItems = mutableListOf<GameItem>()
     private var solutionsMap = mutableMapOf<String, Boolean>()
@@ -93,10 +94,12 @@ class GameViewModel @Inject constructor(
     }
 
     private fun onNextClicked() {
-        if (roundCount == MAX_ROUNDS) {
+        if (roundCount == maxRoundsCount) {
             val score = solutionsMap.values.count { it }
             val questionCount = solutionsMap.size
+
             Timber.d("Solution: $score/$questionCount")
+
             val messageRes = getMessageRes(score, questionCount)
             viewModelScope.launch {
                 _resultsUiState.emit(
@@ -109,8 +112,7 @@ class GameViewModel @Inject constructor(
             }
             // TODO: Send solutionMap to staticts API
         } else {
-            roundCount++
-            getGame()
+            continueGame()
         }
     }
 
@@ -127,6 +129,16 @@ class GameViewModel @Inject constructor(
 
     fun onExitGame() = viewModelScope.launch {
         _exitGame.emit(Unit)
+    }
+
+    private fun continueGame() {
+        _gameUiState.value = gameUiState.value?.copy(
+            gameItem = gameItems[roundCount],
+            imageUrl = nextGameItemImageUrl,
+        )
+        if (roundCount != MAX_ROUNDS) {
+            //generateNextImage(prompt = gameItems[roundCount++].wordEnglish)
+        }
     }
 
     private fun getGame() {
@@ -149,6 +161,8 @@ class GameViewModel @Inject constructor(
                     clear()
                     addAll(it.first)
                 }
+
+                maxRoundsCount = gameItems.size
 
                 _gameUiState.value = GameUiState(
                     gameItem = it.first[0],
