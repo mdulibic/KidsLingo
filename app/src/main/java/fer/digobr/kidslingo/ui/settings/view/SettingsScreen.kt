@@ -6,11 +6,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AppBarDefaults.ContentPadding
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.ContentPadding
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -113,11 +120,12 @@ private fun LanguageSelection(
     onLanguageChanged: (GameLanguage) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(150.dp),
+        contentPadding = PaddingValues(vertical = 8.dp),
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally)
     ) {
-        GameLanguage.values().forEach { language ->
+        items(GameLanguage.values()) { language ->
             SelectionButton(
                 isSelected = language == selectedLanguage,
                 selectionRes = language.titleRes,
@@ -127,6 +135,7 @@ private fun LanguageSelection(
             )
         }
     }
+
 }
 
 @Composable
