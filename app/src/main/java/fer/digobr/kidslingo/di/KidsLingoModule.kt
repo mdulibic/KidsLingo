@@ -39,7 +39,7 @@ object KidsLingoModule {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
-            .baseUrl("http://10.0.2.2:8080")
+            .baseUrl("http://172.20.10.11:8080")
             .build()
     }
 
