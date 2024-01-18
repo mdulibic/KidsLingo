@@ -44,6 +44,7 @@ fun GameScreen(
     val gameUiState by gameViewModel.gameUiState.collectAsState()
     val solutionUiState by gameViewModel.solutionUiState.collectAsState()
     val resultsUiState by gameViewModel.resultsUiState.collectAsState()
+    val userAnswer by gameViewModel.userAnswer.collectAsState()
 
     resultsUiState?.let {
         ResultsScreen(
@@ -55,6 +56,7 @@ fun GameScreen(
     } ?: run {
         GameLayout(
             gameUiState = gameUiState,
+            userAnswer = userAnswer,
             solutionUiState = solutionUiState,
             onActionClick = { gameViewModel.onCtaActionClicked() },
             onUserAnswerChanged = { gameViewModel.onUserAnswerChanged(it) }
@@ -65,6 +67,7 @@ fun GameScreen(
 @Composable
 fun GameLayout(
     gameUiState: GameUiState?,
+    userAnswer: String?,
     solutionUiState: SolutionUiState?,
     onActionClick: () -> Unit,
     onUserAnswerChanged: (String) -> Unit,
@@ -78,7 +81,9 @@ fun GameLayout(
     ) {
         gameUiState?.let {
             Column(
-                modifier = Modifier.weight(1f).padding(16.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 GameHeader(gameUiState = gameUiState)
@@ -95,6 +100,7 @@ fun GameLayout(
 
                     is GameItem.Election -> ElectionGame(
                         gameItem = item,
+                        userAnswer = userAnswer,
                         isSolutionPreview = solutionUiState != null,
                         onChoiceSelect = onUserAnswerChanged
                     )
@@ -138,7 +144,7 @@ private fun GameImage(
         painter = painter,
         contentDescription = "",
         modifier = modifier
-            .height(200.dp)
+            .height(160.dp)
             .fillMaxWidth(),
     )
 }
@@ -255,7 +261,9 @@ private fun GameCTAButton(
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = AppOrange),
         onClick = onActionClick,
         contentPadding = PaddingValues(10.dp),
-        modifier = modifier.fillMaxWidth().padding(16.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
         Text(
             text = stringResource(id = ctaButtonRes),

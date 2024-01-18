@@ -1,5 +1,6 @@
 package fer.digobr.kidslingo.ui.game
 
+import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,12 +9,15 @@ import fer.digobr.kidslingo.domain.SessionManager
 import fer.digobr.kidslingo.domain.model.GameCategory
 import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.domain.model.GameLanguage
+import fer.digobr.kidslingo.domain.model.statistics.StatisticRequest
 import fer.digobr.kidslingo.domain.usecase.GetGameUseCase
 import fer.digobr.kidslingo.domain.usecase.GetGeneratedImageByPrompt
-import fer.digobr.kidslingo.ui.game.model.GameType
+import fer.digobr.kidslingo.domain.usecase.SaveGameStatisticUseCase
+import fer.digobr.kidslingo.ui.game.model.GameLevel
 import fer.digobr.kidslingo.ui.game.model.GameUiState
 import fer.digobr.kidslingo.ui.game.model.ResultsUiState
 import fer.digobr.kidslingo.ui.game.model.SolutionUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -27,9 +31,10 @@ private const val MAX_ROUNDS = 4
 
 @HiltViewModel
 class GameViewModel @Inject constructor(
-    sessionManager: SessionManager,
+    private val sessionManager: SessionManager,
     private val getGameUseCase: GetGameUseCase,
-    private val getGeneratedImageByPrompt: GetGeneratedImageByPrompt
+    private val getGeneratedImageByPrompt: GetGeneratedImageByPrompt,
+    private val saveGameStatisticUseCase: SaveGameStatisticUseCase
 ) : ViewModel() {
 
     private val _gameUiState = MutableStateFlow<GameUiState?>(null)
@@ -37,6 +42,9 @@ class GameViewModel @Inject constructor(
 
     private val _solutionUiState = MutableStateFlow<SolutionUiState?>(null)
     val solutionUiState: StateFlow<SolutionUiState?> = _solutionUiState
+
+    private val _userAnswer = MutableStateFlow<String?>(null)
+    val userAnswer: StateFlow<String?> = _userAnswer
 
     private val _exitGame = MutableSharedFlow<Unit>()
     val exitGame: SharedFlow<Unit> = _exitGame
@@ -49,11 +57,21 @@ class GameViewModel @Inject constructor(
     private var nextGameItemImageUrl: String? = null
     private var gameItems = mutableListOf<GameItem>()
     private var solutionsMap = mutableMapOf<String, Boolean>()
-    private var userAnswer: String? = null
 
     private val currentGameLanguage = sessionManager.language.mapToLanguage()
     private val currentGameCategory = sessionManager.category.mapToCategory()
-    private val currentGameType = sessionManager.level.mapToType()
+    private val currentGameLevel = sessionManager.level.mapToType()
+
+    private var elapsedTimeInSeconds: Double = 0.0
+    private var countDownTimer = object : CountDownTimer(Long.MAX_VALUE, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            elapsedTimeInSeconds++
+        }
+
+        override fun onFinish() {
+            Timber.d("Game finished!")
+        }
+    }
 
     init {
         getGame()
@@ -62,14 +80,15 @@ class GameViewModel @Inject constructor(
     fun onCtaActionClicked() {
         solutionUiState.value?.let {
             _solutionUiState.value = null
+            _userAnswer.value = null
             onNextClicked()
         } ?: kotlin.run {
-            onCheckSolutionClicked(solution = userAnswer)
+            onCheckSolutionClicked(solution = _userAnswer.value)
         }
     }
 
     fun onUserAnswerChanged(answer: String) {
-        userAnswer = answer
+        _userAnswer.value = answer
     }
 
     /**
@@ -81,6 +100,7 @@ class GameViewModel @Inject constructor(
             val isCorrect = word == it
             // Save result to map for statistics
             solutionsMap[word] = isCorrect
+            Timber.d("Answer: $word isCorrect $isCorrect")
 
             _solutionUiState.value = SolutionUiState(
                 isCorrect = isCorrect,
@@ -95,6 +115,8 @@ class GameViewModel @Inject constructor(
 
     private fun onNextClicked() {
         if (roundCount == maxRoundsCount) {
+            countDownTimer.cancel()
+
             val score = solutionsMap.values.count { it }
             val questionCount = solutionsMap.size
 
@@ -110,12 +132,27 @@ class GameViewModel @Inject constructor(
                     )
                 )
             }
-            // TODO: Send solutionMap to staticts API
+            saveGameStatistic()
         } else {
-            // TODO: Delete when generating image works
-            roundCount++
-            //continueGame()
-            getGame()
+            continueGame()
+        }
+    }
+
+    private fun saveGameStatistic() {
+        viewModelScope.launch(Dispatchers.Default) {
+            val numberOfCorrectAnswers = solutionsMap.values.filter { it }.count()
+            val request = StatisticRequest(
+                deviceId = sessionManager.deviceId ?: "",
+                language = currentGameLanguage.value,
+                level = currentGameLevel.name,
+                category = currentGameCategory.value,
+                numberOfCorrectAnswers = numberOfCorrectAnswers,
+                solvingSpeed = elapsedTimeInSeconds
+            )
+            Timber.d("Saving game statistic: $request")
+            saveGameStatisticUseCase(
+                request = request
+            )
         }
     }
 
@@ -135,42 +172,46 @@ class GameViewModel @Inject constructor(
     }
 
     private fun continueGame() {
+        roundCount++
         _gameUiState.value = gameUiState.value?.copy(
+            roundCount = roundCount+1,
             gameItem = gameItems[roundCount],
             imageUrl = nextGameItemImageUrl,
         )
         if (roundCount != MAX_ROUNDS) {
-            //generateNextImage(prompt = gameItems[roundCount++].wordEnglish)
+            generateNextImage(prompt = gameItems[roundCount + 1].wordEnglish)
         }
     }
 
     private fun getGame() {
-        val levelLabel = when (currentGameType) {
-            GameType.MULTIPLE_CHOICE -> R.string.level_1
-            GameType.TYPING -> R.string.level_2
+        val levelLabel = when (currentGameLevel) {
+            GameLevel.ELECTED -> R.string.level_1
+            GameLevel.TYPED -> R.string.level_2
         }
-        val gameQuestionLabel = when (currentGameType) {
-            GameType.MULTIPLE_CHOICE -> R.string.games_question_level_1
-            GameType.TYPING -> R.string.games_question_level_2
+        val gameQuestionLabel = when (currentGameLevel) {
+            GameLevel.ELECTED -> R.string.games_question_level_1
+            GameLevel.TYPED -> R.string.games_question_level_2
         }
 
         viewModelScope.launch {
             getGameUseCase.invoke(
                 language = currentGameLanguage,
-                type = currentGameType,
+                type = currentGameLevel,
                 category = currentGameCategory
             ).collectLatest {
-                gameItems.apply {
-                    clear()
-                    addAll(it.first)
+                gameItems.clear()
+                it.first.forEach { item ->
+                    gameItems.add(item)
                 }
+
+                Timber.d("Game items: $gameItems")
 
                 maxRoundsCount = gameItems.size - 1
 
                 Timber.d("Max rounds count $maxRoundsCount")
 
                 _gameUiState.value = GameUiState(
-                    gameItem = it.first[0],
+                    gameItem = it.first[roundCount],
                     imageUrl = it.second,
                     levelLabelRes = levelLabel,
                     gameQuestionLabelRes = gameQuestionLabel,
@@ -178,9 +219,11 @@ class GameViewModel @Inject constructor(
                     ctaButtonRes = R.string.btn_check,
                     gameItemsCount = it.first.count()
                 )
+                countDownTimer.start()
             }
+
+            generateNextImage(prompt = gameItems[roundCount + 1].wordEnglish)
         }
-        // generateNextImage(prompt = gameItems[roundCount++].wordEnglish)
     }
 
     private fun generateNextImage(prompt: String?) {
@@ -209,10 +252,10 @@ class GameViewModel @Inject constructor(
             else -> GameCategory.COLORS
         }
 
-    private fun String?.mapToType(): GameType =
+    private fun String?.mapToType(): GameLevel =
         when (this) {
-            "1" -> GameType.MULTIPLE_CHOICE
-            "2" -> GameType.TYPING
-            else -> GameType.TYPING
+            "1" -> GameLevel.ELECTED
+            "2" -> GameLevel.TYPED
+            else -> GameLevel.TYPED
         }
 }

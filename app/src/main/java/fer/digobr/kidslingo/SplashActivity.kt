@@ -2,6 +2,7 @@ package fer.digobr.kidslingo
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,9 @@ class SplashActivity : AppCompatActivity() {
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        onboardingViewModel.saveDeviceId(androidId)
 
         if (onboardingViewModel.isUserOnboarded()) {
             navigateToHome()

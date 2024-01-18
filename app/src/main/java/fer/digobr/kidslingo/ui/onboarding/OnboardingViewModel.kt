@@ -16,4 +16,10 @@ class OnboardingViewModel @Inject constructor(
     fun onStartClicked(username: String) {
         sessionManager.username = username
     }
+
+    fun saveDeviceId(deviceId: String) {
+        if (sessionManager.deviceId == null) {
+            sessionManager.deviceId = deviceId
+        }
+    }
 }

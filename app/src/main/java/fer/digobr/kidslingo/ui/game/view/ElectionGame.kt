@@ -24,28 +24,27 @@ import androidx.compose.ui.unit.sp
 import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.theme.AppCorrectGreen
 import fer.digobr.kidslingo.theme.AppGreen
+import fer.digobr.kidslingo.theme.AppOrange
 import fer.digobr.kidslingo.theme.AppWrongRed
 
 @Composable
 fun ElectionGame(
     gameItem: GameItem.Election,
+    userAnswer: String?,
     isSolutionPreview: Boolean,
     onChoiceSelect: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedChoice by remember { mutableStateOf<String?>(null) }
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center
     ) {
         gameItem.wordMap.keys.forEach { choice ->
             ChoiceButton(
-                isSelected = choice == selectedChoice,
+                isSelected = choice == userAnswer,
                 isSolution = if (isSolutionPreview) choice == gameItem.word else null,
                 choice = choice,
                 onClick = {
-                    selectedChoice = choice
                     onChoiceSelect(choice)
                 }
             )
@@ -71,7 +70,7 @@ private fun ChoiceButton(
                 AppWrongRed
             }
         } ?: run {
-            AppCorrectGreen
+            AppOrange
         }
     } else {
         isSolution?.let {
@@ -94,7 +93,7 @@ private fun ChoiceButton(
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = btnBgColor),
         onClick = { if (isEnabled) onClick(choice) },
-        contentPadding = PaddingValues(10.dp),
+        contentPadding = PaddingValues(8.dp),
         enabled = isEnabled,
         modifier = Modifier.fillMaxWidth()
     ) {

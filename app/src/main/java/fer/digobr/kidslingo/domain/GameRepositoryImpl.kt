@@ -1,6 +1,7 @@
 package fer.digobr.kidslingo.domain
 
 import fer.digobr.kidslingo.data.GameRepository
+import fer.digobr.kidslingo.data.model.ApiStatisticResponse
 import fer.digobr.kidslingo.data.model.ImageGenerationRequest
 import fer.digobr.kidslingo.data.rest.KidsLingoApi
 import fer.digobr.kidslingo.data.rest.OpenAiApi
@@ -8,8 +9,8 @@ import fer.digobr.kidslingo.domain.mapper.GameMapper
 import fer.digobr.kidslingo.domain.model.GameCategory
 import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.domain.model.GameLanguage
-import fer.digobr.kidslingo.ui.game.model.GameType
-import kotlinx.coroutines.async
+import fer.digobr.kidslingo.domain.model.statistics.StatisticRequest
+import fer.digobr.kidslingo.ui.game.model.GameLevel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -43,26 +44,33 @@ class GameRepositoryImpl @Inject constructor(
         )
     }.distinctUntilChanged()
 
-    private suspend fun generateImage(prompt: String?): String? =
-        openAiApi.generateImage(
-            request = ImageGenerationRequest(
-                prompt = prompt ?: ""
+    private suspend fun generateImage(prompt: String?): String? {
+        return try {
+            val response = openAiApi.generateImage(
+                request = ImageGenerationRequest(
+                    prompt = prompt ?: ""
+                )
             )
-        ).data.first().url
+            response.data.firstOrNull()?.url
+        } catch (e: Exception) {
+            Timber.e(e, "Error in generateImage")
+            "https://placekitten.com/300/200"
+        }
+    }
 
 
     private fun gameStream(
         language: GameLanguage,
-        type: GameType,
+        type: GameLevel,
         category: GameCategory
     ) =
         when (type) {
-            GameType.MULTIPLE_CHOICE -> getGameWithElectionCandidates(
+            GameLevel.ELECTED -> getGameWithElectionCandidates(
                 gameLanguage = language.value,
                 category = category.value
             )
 
-            GameType.TYPING -> getClassicGame(
+            GameLevel.TYPED -> getClassicGame(
                 gameLanguage = language.value,
                 category = category.value
             )
@@ -99,7 +107,7 @@ class GameRepositoryImpl @Inject constructor(
 
     override fun getGameByLanguageAndType(
         language: GameLanguage,
-        type: GameType,
+        type: GameLevel,
         category: GameCategory
     ): Flow<Pair<List<GameItem>, String?>> = gameStream(
         language = language,
@@ -108,6 +116,29 @@ class GameRepositoryImpl @Inject constructor(
     )
 
     override fun generateImageByPrompt(prompt: String?): Flow<String?> = flow {
-        emit(generateImage(prompt = prompt))
+        try {
+            emit(generateImage(prompt = prompt))
+        } catch (e: Exception) {
+            Timber.e(e, "Error in generateImageByPrompt")
+            emit("https://placekitten.com/300/200")
+        }
     }
+
+    override suspend fun saveStatistic(request: StatisticRequest) {
+        try {
+            api.saveStatistic(request = request)
+        } catch (e: Exception) {
+            Timber.e(e, "Error in saveStatistic")
+        }
+    }
+
+    override fun getStatistic(deviceId: String): Flow<ApiStatisticResponse> = flow {
+        try {
+            emit(api.getStatistic(deviceId = deviceId))
+        } catch (e: Exception) {
+            Timber.e(e, "Error in getStatistic")
+            emit(ApiStatisticResponse())
+        }
+    }
+
 }
