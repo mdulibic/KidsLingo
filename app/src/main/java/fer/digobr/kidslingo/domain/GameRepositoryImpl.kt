@@ -9,7 +9,9 @@ import fer.digobr.kidslingo.domain.mapper.GameMapper
 import fer.digobr.kidslingo.domain.model.GameCategory
 import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.domain.model.GameLanguage
+import fer.digobr.kidslingo.domain.model.statistics.LanguageStatistic
 import fer.digobr.kidslingo.domain.model.statistics.StatisticRequest
+import fer.digobr.kidslingo.domain.model.statistics.StatisticType
 import fer.digobr.kidslingo.ui.game.model.GameLevel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -138,7 +140,42 @@ class GameRepositoryImpl @Inject constructor(
             emit(api.getStatistic(deviceId = deviceId))
         } catch (e: Exception) {
             Timber.e(e, "Error in getStatistic")
-            emit(ApiStatisticResponse())
+            emit(ApiStatisticResponse(
+                englishStatistic = LanguageStatistic(
+                    averageCorrectAnswers = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), averageSolvingSpeed = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), progressStatistic = listOf()
+                ), frenchStatistic = LanguageStatistic(
+                    averageCorrectAnswers = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), averageSolvingSpeed = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), progressStatistic = listOf()
+                ), germanStatistic = LanguageStatistic(
+                    averageCorrectAnswers = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), averageSolvingSpeed = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), progressStatistic = listOf()
+                ), italianStatistic = LanguageStatistic(
+                    averageCorrectAnswers = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), averageSolvingSpeed = StatisticType(
+                        elected = mapOf(),
+                        typed = mapOf()
+                    ), progressStatistic = listOf()
+                )
+
+            ))
         }
     }
 

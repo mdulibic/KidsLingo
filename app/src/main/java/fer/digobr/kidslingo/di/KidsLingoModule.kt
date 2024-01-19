@@ -20,6 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -39,7 +40,7 @@ object KidsLingoModule {
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient)
-            .baseUrl("http://172.20.10.11:8080")
+            .baseUrl("https://kid-lingo.onrender.com")
             .build()
     }
 
@@ -50,6 +51,9 @@ object KidsLingoModule {
         return OkHttpClient()
             .newBuilder()
             .addInterceptor(interceptor = loggingInterceptor())
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 

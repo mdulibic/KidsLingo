@@ -18,11 +18,10 @@
     <string name="level_2">Level 2</string>
     <string name="level_3">Level 3</string>
     <string name="round_label">%1$s/%2$s</string>
-    <string name="games_question_level_1_colors">Koju boju vidiš na slici?</string>
-    <string name="games_question_level_1_animals">Koju životinju vidiš na slici?</string>
-    <string name="games_question_level_1_food">Koju hranu vidiš na slici?</string>
-    <string name="games_question_level_1_object">Koji predmet vidiš na slici?</string>
-    <string name="games_question_level_2">Što je na slici? Napiši:</string>
+    <string name="games_question_colors">Koja boja je na slici?</string>
+    <string name="games_question_animals">Koja životinja je na slici?</string>
+    <string name="games_question_food">Koju hrana je na slici?</string>
+    <string name="games_question_object">Koji predmet je na na slici?</string>
     <string name="btn_check">Provjeri</string>
     <string name="btn_continue">Nastavi</string>
     <string name="correct_answer">Točan odgovor!</string>
@@ -48,4 +47,15 @@
     <string name="good_message">Samo tako nastavi!</string>
     <string name="excellent_message">Bravo, sve točno!</string>
     <string name="average_message">Nemoj odustati, nastavi vježbati!</string>
+    <string name="english_statistic">Statistika - Engleski</string>
+    <string name="french_statistic">Statistika - Francuski</string>
+    <string name="german_statistic">Statistika - Njemački</string>
+    <string name="italian_statistic">Statistika - Talijanski</string>
+    <string name="average_correct_answers">Prosječni broj točnih odgovora</string>
+    <string name="average_solving_speed">Prosječna brzina rješavanja\n(u sekundama)</string>
+    <string name="progress_statistics">Statistika napretka</string>
+    <string name="elected">Višestruki odabir</string>
+    <string name="typed">Tipkanje</string>
+    <string name="no_data">Nema podataka za ovu kategoriju</string>
+    <string name="legenda">Legenda</string>
 </resources>

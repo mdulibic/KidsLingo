@@ -167,7 +167,7 @@ class GameViewModel @Inject constructor(
         val proportion = score.toFloat() / questionCount
 
         return when {
-            proportion >= 0.8 -> R.string.excellent_message
+            proportion.toInt() == 1 -> R.string.excellent_message
             proportion >= 0.6 -> R.string.good_message
             proportion >= 0.4 -> R.string.average_message
             else -> R.string.average_message
@@ -195,18 +195,13 @@ class GameViewModel @Inject constructor(
             GameLevel.ELECTED -> R.string.level_1
             GameLevel.TYPED -> R.string.level_2
         }
-        val gameQuestionLabel = when (currentGameLevel) {
-            GameLevel.ELECTED -> {
-                when (currentGameCategory) {
-                    GameCategory.COLORS -> R.string.games_question_level_1_colors
-                    GameCategory.ANIMALS -> R.string.games_question_level_1_animals
-                    GameCategory.FOOD -> R.string.games_question_level_1_food
-                    GameCategory.OBJECTS -> R.string.games_question_level_1_object
-                }
+        val gameQuestionLabel =
+            when (currentGameCategory) {
+                GameCategory.COLORS -> R.string.games_question_colors
+                GameCategory.ANIMALS -> R.string.games_question_animals
+                GameCategory.FOOD -> R.string.games_question_food
+                GameCategory.OBJECTS -> R.string.games_question_object
             }
-
-            GameLevel.TYPED -> R.string.games_question_level_2
-        }
 
         viewModelScope.launch {
             getGameUseCase.invoke(
@@ -269,10 +264,12 @@ class GameViewModel @Inject constructor(
             else -> GameCategory.COLORS
         }
 
-    private fun String?.mapToType(): GameLevel =
-        when (this) {
+    private fun String?.mapToType(): GameLevel {
+        Timber.d("mapToType $this")
+        return when (this) {
             "1" -> GameLevel.ELECTED
             "2" -> GameLevel.TYPED
-            else -> GameLevel.TYPED
+            else -> GameLevel.ELECTED
         }
+    }
 }
