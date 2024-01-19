@@ -11,6 +11,7 @@ import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.domain.model.GameLanguage
 import fer.digobr.kidslingo.domain.model.statistics.StatisticRequest
 import fer.digobr.kidslingo.ui.game.model.GameLevel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -87,13 +88,13 @@ class GameRepositoryImpl @Inject constructor(
 
                 flow {
                     coroutineScope {
-//                        val imageJob =
-//                            async {
-//                                generateImage(prompt = words[0])
-//                            }
-//
-//                        val startImageUrl = imageJob.await()
-                        val startImageUrl = "https://placekitten.com/300/200"
+                        val imageJob =
+                            async {
+                                generateImage(prompt = words[0])
+                            }
+
+                        val startImageUrl = imageJob.await()
+                       // val startImageUrl = "https://placekitten.com/300/200"
 
                         val game = mapper.mapToGameItems(
                             apiGameList = apiGameList,

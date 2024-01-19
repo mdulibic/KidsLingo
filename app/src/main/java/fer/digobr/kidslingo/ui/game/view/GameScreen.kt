@@ -36,6 +36,7 @@ import fer.digobr.kidslingo.theme.AppOrange
 import fer.digobr.kidslingo.ui.game.GameViewModel
 import fer.digobr.kidslingo.ui.game.model.GameUiState
 import fer.digobr.kidslingo.ui.game.model.SolutionUiState
+import timber.log.Timber
 
 @Composable
 fun GameScreen(
@@ -45,6 +46,7 @@ fun GameScreen(
     val solutionUiState by gameViewModel.solutionUiState.collectAsState()
     val resultsUiState by gameViewModel.resultsUiState.collectAsState()
     val userAnswer by gameViewModel.userAnswer.collectAsState()
+    val isCtaEnabled by gameViewModel.isCtaEnabled.collectAsState()
 
     resultsUiState?.let {
         ResultsScreen(
@@ -58,6 +60,7 @@ fun GameScreen(
             gameUiState = gameUiState,
             userAnswer = userAnswer,
             solutionUiState = solutionUiState,
+            isCtaEnabled = isCtaEnabled,
             onActionClick = { gameViewModel.onCtaActionClicked() },
             onUserAnswerChanged = { gameViewModel.onUserAnswerChanged(it) }
         )
@@ -68,6 +71,7 @@ fun GameScreen(
 fun GameLayout(
     gameUiState: GameUiState?,
     userAnswer: String?,
+    isCtaEnabled: Boolean,
     solutionUiState: SolutionUiState?,
     onActionClick: () -> Unit,
     onUserAnswerChanged: (String) -> Unit,
@@ -95,6 +99,7 @@ fun GameLayout(
                 Spacer(modifier = Modifier.height(24.dp))
                 when (val item = it.gameItem) {
                     is GameItem.Classic -> TypingGame(
+                        userAnswer = userAnswer,
                         onAnswerChanged = onUserAnswerChanged
                     )
 
@@ -108,6 +113,7 @@ fun GameLayout(
             }
             GameCTALayout(
                 correctAnswer = gameUiState.gameItem.word,
+                isCtaEnabled = isCtaEnabled,
                 hasBottomSheetPreview = gameUiState.gameItem is GameItem.Classic,
                 ctaButtonRes = gameUiState.ctaButtonRes,
                 onActionClick = onActionClick,
@@ -189,6 +195,7 @@ private fun GameHeader(
 private fun GameCTALayout(
     correctAnswer: String,
     hasBottomSheetPreview: Boolean,
+    isCtaEnabled: Boolean,
     ctaButtonRes: Int,
     solutionUiState: SolutionUiState?,
     onActionClick: () -> Unit,
@@ -233,18 +240,21 @@ private fun GameCTALayout(
                 }
                 GameCTAButton(
                     ctaButtonRes = ctaButtonRes,
+                    isCtaEnabled = isCtaEnabled,
                     onActionClick = onActionClick,
                 )
             }
         } ?: run {
             GameCTAButton(
                 ctaButtonRes = ctaButtonRes,
+                isCtaEnabled = isCtaEnabled,
                 onActionClick = onActionClick,
             )
         }
     } else {
         GameCTAButton(
             ctaButtonRes = ctaButtonRes,
+            isCtaEnabled = isCtaEnabled,
             onActionClick = onActionClick,
         )
     }
@@ -253,13 +263,17 @@ private fun GameCTALayout(
 @Composable
 private fun GameCTAButton(
     ctaButtonRes: Int,
+    isCtaEnabled: Boolean,
     onActionClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val backgroundColor = if(isCtaEnabled) AppOrange else AppOrange.copy(alpha = 0.7f)
+    Timber.d("GameCTAButton isEnabled: $isCtaEnabled")
     OutlinedButton(
         shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = AppOrange),
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = backgroundColor ),
         onClick = onActionClick,
+        enabled = isCtaEnabled,
         contentPadding = PaddingValues(10.dp),
         modifier = modifier
             .fillMaxWidth()

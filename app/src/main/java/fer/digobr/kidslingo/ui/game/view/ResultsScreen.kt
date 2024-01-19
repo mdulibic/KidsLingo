@@ -34,6 +34,8 @@ fun ResultsScreen(
 ) {
     Column(
         modifier = Modifier.background(AppGreen),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
             modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 32.dp),
@@ -47,6 +49,7 @@ fun ResultsScreen(
                 fontSize = 32.sp,
             )
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally)
             ) {
                 Image(

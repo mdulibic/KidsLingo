@@ -6,6 +6,7 @@ import fer.digobr.kidslingo.domain.model.GameItem
 import fer.digobr.kidslingo.domain.model.GameLanguage
 import fer.digobr.kidslingo.ui.game.model.GameLevel
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
 
 class GetGameUseCase @Inject constructor(private val gameRepository: GameRepository) {

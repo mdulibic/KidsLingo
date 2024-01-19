@@ -27,19 +27,19 @@ class SessionManager @Inject constructor(@ApplicationContext private val appCont
         }
 
     var language: String?
-        get() = appPreferences.getString(LANGUAGE, "english")
+        get() = appPreferences.getString(LANGUAGE, null)
         set(value) {
             appPreferences.edit().putString(LANGUAGE, value).apply()
         }
 
     var category: String?
-        get() = appPreferences.getString(CATEGORY, "animals")
+        get() = appPreferences.getString(CATEGORY, null)
         set(value) {
             appPreferences.edit().putString(CATEGORY, value).apply()
         }
 
     var level: String?
-        get() = appPreferences.getString(LEVEL, "1")
+        get() = appPreferences.getString(LEVEL, null)
         set(value) {
             appPreferences.edit().putString(LEVEL, value).apply()
         }

@@ -47,7 +47,7 @@ object OpenAiApiModule {
             .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(
                 Interceptor {
-                    val apiKey = "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"
+                    val apiKey = "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"
 
                     val newRequest = it.request().newBuilder()
                         .addHeader("Authorization", "Bearer $apiKey")

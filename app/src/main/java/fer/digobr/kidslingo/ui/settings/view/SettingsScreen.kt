@@ -41,18 +41,21 @@ import fer.digobr.kidslingo.theme.AppGreen
 import fer.digobr.kidslingo.theme.AppOrange
 import fer.digobr.kidslingo.ui.settings.SettingsViewModel
 import fer.digobr.kidslingo.ui.settings.model.SettingsUiState
+import timber.log.Timber
 
 @Composable
 fun SettingsScreen(
     settingsViewModel: SettingsViewModel
 ) {
     val uiState by settingsViewModel.uiState.collectAsState()
-    SettingsLayout(
-        uiState = uiState,
-        onLanguageChanged = { settingsViewModel.onLanguageChanged(it) },
-        onCategoryChanged = { settingsViewModel.onCategoryChanged(it) },
-        onLevelChanged = { settingsViewModel.onLevelChanged(it) },
-    )
+    uiState?.let {
+        SettingsLayout(
+            uiState = it,
+            onLanguageChanged = { settingsViewModel.onLanguageChanged(it) },
+            onCategoryChanged = { settingsViewModel.onCategoryChanged(it) },
+            onLevelChanged = { settingsViewModel.onLevelChanged(it) },
+        )
+    }
 }
 
 @Composable
@@ -89,6 +92,7 @@ private fun SettingsLayout(
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+            Timber.d("Selected category ${uiState.selectedCategory}")
             CategorySelection(
                 selectedCategory = uiState.selectedCategory,
                 onCategoryChanged = onCategoryChanged,

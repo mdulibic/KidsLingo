@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -52,15 +53,18 @@ class GameViewModel @Inject constructor(
     private val _resultsUiState = MutableStateFlow<ResultsUiState?>(null)
     val resultsUiState: StateFlow<ResultsUiState?> = _resultsUiState
 
+    private val _isCtaEnabled = MutableStateFlow(false)
+    val isCtaEnabled: StateFlow<Boolean> = _isCtaEnabled
+
     private var roundCount = 0
     private var maxRoundsCount: Int = 0
     private var nextGameItemImageUrl: String? = null
     private var gameItems = mutableListOf<GameItem>()
     private var solutionsMap = mutableMapOf<String, Boolean>()
 
-    private val currentGameLanguage = sessionManager.language.mapToLanguage()
-    private val currentGameCategory = sessionManager.category.mapToCategory()
-    private val currentGameLevel = sessionManager.level.mapToType()
+    private var currentGameLanguage: GameLanguage
+    private var currentGameCategory: GameCategory
+    private var currentGameLevel: GameLevel
 
     private var elapsedTimeInSeconds: Double = 0.0
     private var countDownTimer = object : CountDownTimer(Long.MAX_VALUE, 1000) {
@@ -74,6 +78,9 @@ class GameViewModel @Inject constructor(
     }
 
     init {
+        currentGameLanguage = sessionManager.language.mapToLanguage()
+        currentGameCategory = sessionManager.category.mapToCategory()
+        currentGameLevel = sessionManager.level.mapToType()
         getGame()
     }
 
@@ -174,7 +181,7 @@ class GameViewModel @Inject constructor(
     private fun continueGame() {
         roundCount++
         _gameUiState.value = gameUiState.value?.copy(
-            roundCount = roundCount+1,
+            roundCount = roundCount + 1,
             gameItem = gameItems[roundCount],
             imageUrl = nextGameItemImageUrl,
         )
@@ -189,7 +196,15 @@ class GameViewModel @Inject constructor(
             GameLevel.TYPED -> R.string.level_2
         }
         val gameQuestionLabel = when (currentGameLevel) {
-            GameLevel.ELECTED -> R.string.games_question_level_1
+            GameLevel.ELECTED -> {
+                when (currentGameCategory) {
+                    GameCategory.COLORS -> R.string.games_question_level_1_colors
+                    GameCategory.ANIMALS -> R.string.games_question_level_1_animals
+                    GameCategory.FOOD -> R.string.games_question_level_1_food
+                    GameCategory.OBJECTS -> R.string.games_question_level_1_object
+                }
+            }
+
             GameLevel.TYPED -> R.string.games_question_level_2
         }
 
@@ -227,28 +242,30 @@ class GameViewModel @Inject constructor(
     }
 
     private fun generateNextImage(prompt: String?) {
+        _isCtaEnabled.update { false }
         viewModelScope.launch {
             getGeneratedImageByPrompt(prompt = prompt).collectLatest {
                 nextGameItemImageUrl = it
+                _isCtaEnabled.update { true }
             }
         }
     }
 
     private fun String?.mapToLanguage(): GameLanguage =
         when (this) {
-            "english" -> GameLanguage.ENGLISH
-            "french" -> GameLanguage.FRENCH
-            "german" -> GameLanguage.GERMAN
-            "italian" -> GameLanguage.ITALIAN
+            "english".uppercase() -> GameLanguage.ENGLISH
+            "french".uppercase() -> GameLanguage.FRENCH
+            "german".uppercase() -> GameLanguage.GERMAN
+            "italian".uppercase() -> GameLanguage.ITALIAN
             else -> GameLanguage.ENGLISH
         }
 
     private fun String?.mapToCategory(): GameCategory =
         when (this) {
-            "colors" -> GameCategory.COLORS
-            "animals" -> GameCategory.ANIMALS
-            "food" -> GameCategory.FOOD
-            "objects" -> GameCategory.OBJECTS
+            "colors".uppercase() -> GameCategory.COLORS
+            "animals".uppercase() -> GameCategory.ANIMALS
+            "food".uppercase() -> GameCategory.FOOD
+            "objects".uppercase() -> GameCategory.OBJECTS
             else -> GameCategory.COLORS
         }
 

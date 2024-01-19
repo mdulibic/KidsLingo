@@ -13,16 +13,15 @@ import androidx.compose.ui.graphics.Color
 
 @Composable
 fun TypingGame(
-    modifier: Modifier = Modifier,
+    userAnswer: String?,
     onAnswerChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    var text by remember { mutableStateOf("") }
     TextField(
         modifier = modifier.fillMaxWidth(),
-        value = text,
-        onValueChange = { newText ->
-            text = newText
-            onAnswerChanged(text)
+        value = userAnswer ?: "",
+        onValueChange = {
+            onAnswerChanged(it)
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.White,

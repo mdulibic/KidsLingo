@@ -4,6 +4,7 @@ import fer.digobr.kidslingo.R
 import fer.digobr.kidslingo.domain.model.GameCategory
 import fer.digobr.kidslingo.domain.model.GameLanguage
 import fer.digobr.kidslingo.domain.model.GameLevel
+import timber.log.Timber
 import javax.inject.Inject
 
 class SettingsMapper @Inject constructor() {
@@ -18,20 +19,20 @@ class SettingsMapper @Inject constructor() {
 
     fun mapToLanguage(value: String?) = with(value) {
         when (this) {
-            "english" -> GameLanguage.ENGLISH
-            "french" -> GameLanguage.FRENCH
-            "german" -> GameLanguage.GERMAN
-            "italian" -> GameLanguage.ITALIAN
+            "english".uppercase() -> GameLanguage.ENGLISH
+            "french".uppercase() -> GameLanguage.FRENCH
+            "german".uppercase() -> GameLanguage.GERMAN
+            "italian".uppercase() -> GameLanguage.ITALIAN
             else -> GameLanguage.ENGLISH
         }
     }
 
     fun mapToCategory(value: String?) = with(value) {
         when (this) {
-            "animals" -> GameCategory.ANIMALS
-            "objects" -> GameCategory.OBJECTS
-            "food" -> GameCategory.FOOD
-            "colors" -> GameCategory.COLORS
+            "animals".uppercase() -> GameCategory.ANIMALS
+            "objects".uppercase() -> GameCategory.OBJECTS
+            "food".uppercase() -> GameCategory.FOOD
+            "colors".uppercase() -> GameCategory.COLORS
             else -> GameCategory.ANIMALS
         }
     }
@@ -43,6 +44,4 @@ class SettingsMapper @Inject constructor() {
             else -> GameLevel.ELECTION
         }
     }
-
-
 }
